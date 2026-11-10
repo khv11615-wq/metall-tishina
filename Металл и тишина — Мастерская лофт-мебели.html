@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Металл и тишина — Мастерская лофт-мебели</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0b0c10',
+                        cardBg: '#12141c',
+                        cardHover: '#1a1d27',
+                        accentWood: '#c58b53',
+                        accentGold: '#d4af37',
+                        metalGray: '#1f2430',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0c10;
+            color: #e5e7eb;
+        }
+        /* Custom glow effects */
+        .glow-wood {
+            box-shadow: 0 0 25px rgba(197, 139, 83, 0.15);
+        }
+        .glow-wood-hover:hover {
+            box-shadow: 0 0 35px rgba(197, 139, 83, 0.3);
+        }
+        /* Hide scrollbars for clean look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0c10;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #272a37;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c58b53;
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-gray-100 antialiased selection:bg-accentWood selection:text-white">
+
+    <!-- Toast Notification Modal / Box -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-24 opacity-0 transition-all duration-300 bg-cardBg border border-accentWood text-white px-6 py-4 rounded-xl shadow-2xl flex items-center space-x-3">
+        <i class="fa-solid fa-circle-check text-accentWood text-xl"></i>
+        <div>
+            <h4 class="font-bold text-sm">Уведомление</h4>
+            <p id="toast-msg" class="text-xs text-gray-400">Ссылка скопирована в буфер обмена</p>
+        </div>
+    </div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-darkBg/90 backdrop-blur-md border-b border-gray-800 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-accentWood to-amber-800 flex items-center justify-center text-white font-bold text-xl shadow-lg group-hover:scale-105 transition-transform">
+                    <i class="fa-solid fa-couch"></i>
+                </div>
+                <div>
+                    <span class="block font-bold text-lg tracking-wider text-white">МЕТАЛЛ И ТИШИНА</span>
+                    <span class="block text-[10px] text-accentWood uppercase tracking-widest">Мастерская лофт-мебели</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-300">
+                <a href="#about" class="hover:text-accentWood transition-colors">О мастерской</a>
+                <a href="#catalog" class="hover:text-accentWood transition-colors">Каталог</a>
+                <a href="#sizes" class="hover:text-accentWood transition-colors">Размеры и цены</a>
+                <a href="#process" class="hover:text-accentWood transition-colors">Как мы работаем</a>
+                <a href="#contacts" class="hover:text-accentWood transition-colors">Контакты</a>
+            </nav>
+
+            <!-- CTA Button & Mobile Menu Trigger -->
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-accentWood to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-lg glow-wood glow-wood-hover transition-all flex items-center space-x-2">
+                    <i class="fa-brands fa-instagram text-lg"></i>
+                    <span>Написать в Instagram</span>
+                </a>
+            </div>
+
+            <!-- Mobile menu button -->
+            <button id="menu-btn" class="md:hidden text-gray-300 hover:text-white focus:outline-none p-2">
+                <i class="fa-solid fa-bars text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Nav Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-cardBg border-b border-gray-800 px-6 py-6 space-y-4">
+            <a href="#about" class="block text-gray-300 hover:text-accentWood transition-colors font-medium">О мастерской</a>
+            <a href="#catalog" class="block text-gray-300 hover:text-accentWood transition-colors font-medium">Каталог</a>
+            <a href="#sizes" class="block text-gray-300 hover:text-accentWood transition-colors font-medium">Размеры и цены</a>
+            <a href="#process" class="block text-gray-300 hover:text-accentWood transition-colors font-medium">Как мы работаем</a>
+            <a href="#contacts" class="block text-gray-300 hover:text-accentWood transition-colors font-medium">Контакты</a>
+            <div class="pt-2">
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="w-full bg-accentWood text-white text-center py-3 rounded-xl font-semibold flex items-center justify-center space-x-2 shadow-md">
+                    <i class="fa-brands fa-instagram text-lg"></i>
+                    <span>Написать в Instagram</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative pt-32 pb-20 md:pt-44 md:pb-32 overflow-hidden">
+        <!-- Background decorative grid / glow -->
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-900/10 via-darkBg to-darkBg -z-10"></div>
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-accentWood/10 blur-[120px] rounded-full -z-10 pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left text content -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center space-x-2 bg-cardBg border border-gray-800 px-4 py-2 rounded-full text-xs font-semibold text-accentWood uppercase tracking-wider">
+                        <i class="fa-solid fa-fire text-amber-500"></i>
+                        <span>Мастерская эксклюзивного лофта</span>
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
+                        Металл и тишина — <span class="bg-gradient-to-r from-accentWood to-amber-200 bg-clip-text text-transparent">Мастерская лофт-мебели</span>
+                    </h1>
+                    <p class="text-lg sm:text-xl text-accentWood font-medium">
+                        Парящие кровати, стеллажи и мебель в стиле лофт
+                    </p>
+                    <p class="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        Каждое изделие проходит единый путь: от чертежа, сварки металла до обработки дерева маслом. Мы не торопимся — мы делаем так, чтобы стоять годами.
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4 pt-4">
+                        <a href="#catalog" class="w-full sm:w-auto bg-accentWood hover:bg-amber-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg glow-wood transition-all text-center">
+                            Смотреть каталог
+                        </a>
+                        <a href="#contacts" class="w-full sm:w-auto bg-cardBg hover:bg-cardHover border border-gray-700 text-gray-200 font-bold px-8 py-4 rounded-xl transition-all text-center">
+                            Связаться с нами
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right visual card/quote banner -->
+                <div class="lg:col-span-5">
+                    <div class="relative bg-cardBg border border-gray-800 rounded-3xl p-8 shadow-2xl overflow-hidden glow-wood">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-accentWood/10 rounded-bl-full pointer-events-none"></div>
+                        <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-500/5 rounded-full blur-2xl pointer-events-none"></div>
+                        
+                        <div class="relative z-10 space-y-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 rounded-xl bg-accentWood/20 border border-accentWood/40 flex items-center justify-center text-accentWood text-xl">
+                                    <i class="fa-solid fa-feather-pointed"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-white text-lg">Философия покоя</h3>
+                                    <p class="text-xs text-gray-400">Авторский дизайн и надежность</p>
+                                </div>
+                            </div>
+
+                            <blockquote class="border-l-2 border-accentWood pl-4 italic text-gray-300 text-sm sm:text-base leading-relaxed">
+                                «Кровать, которая парит — это не просто мебель. Это ощущение полёта, невесомости и абсолютного покоя.»
+                            </blockquote>
+
+                            <div class="grid grid-cols-2 gap-4 pt-2">
+                                <div class="bg-darkBg/60 border border-gray-800/80 p-4 rounded-2xl text-center">
+                                    <span class="block text-2xl font-black text-accentWood">100%</span>
+                                    <span class="block text-xs text-gray-400 mt-1">Кастомные чертежи</span>
+                                </div>
+                                <div class="bg-darkBg/60 border border-gray-800/80 p-4 rounded-2xl text-center">
+                                    <span class="block text-2xl font-black text-accentWood">10-14</span>
+                                    <span class="block text-xs text-gray-400 mt-1">Дней изготовление</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="py-20 bg-cardBg/40 border-t border-b border-gray-800/60 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <h2 class="text-xs uppercase tracking-widest text-accentWood font-bold">О мастерской</h2>
+                <h3 class="text-3xl sm:text-4xl font-extrabold text-white">Мы делаем мебель, в которой хочется остаться</h3>
+                <p class="text-gray-400 text-sm sm:text-base">
+                    Без штампованного однообразия и без хаоса кастомных чертежей. Ваше пространство будет уникальным и безупречным.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="bg-cardBg border border-gray-800 rounded-2xl p-8 hover:border-accentWood/50 transition-all duration-300 group">
+                    <div class="w-14 h-14 rounded-xl bg-accentWood/10 border border-accentWood/30 flex items-center justify-center text-accentWood text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-compass-drafting"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Индивидуальные чертежи</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Каждый проект адаптируется под ваши габариты, планировку и особенности помещения без потери стиля и прочности.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-cardBg border border-gray-800 rounded-2xl p-8 hover:border-accentWood/50 transition-all duration-300 group">
+                    <div class="w-14 h-14 rounded-xl bg-accentWood/10 border border-accentWood/30 flex items-center justify-center text-accentWood text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-hammer"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Надежные материалы</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Прочная сварка металлокаркаса, благородные породы дерева и глубокая пропитка защитным маслом для долговечной службы.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-cardBg border border-gray-800 rounded-2xl p-8 hover:border-accentWood/50 transition-all duration-300 group">
+                    <div class="w-14 h-14 rounded-xl bg-accentWood/10 border border-accentWood/30 flex items-center justify-center text-accentWood text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Предсказуемые сроки</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Четкая линейка стандартных размеров и оперативное изготовление нестандартных решений точно в оговоренный срок.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CATALOG SECTION -->
+    <section id="catalog" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <h2 class="text-xs uppercase tracking-widest text-accentWood font-bold">Каталог продукции</h2>
+                <h3 class="text-3xl sm:text-4xl font-extrabold text-white">Что мы делаем</h3>
+                <p class="text-gray-400 text-sm sm:text-base">
+                    Мебель, собранная под ваше пространство с безупречным вниманием к деталям.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Product 1 -->
+                <div class="bg-cardBg border border-gray-800 rounded-3xl overflow-hidden flex flex-col justify-between group hover:border-accentWood/50 transition-all">
+                    <div class="h-64 bg-metalGray relative overflow-hidden flex items-center justify-center">
+                        <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-transparent to-transparent z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80" alt="Парящие кровати" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/12141c/c58b53?text=Floating+Bed'">
+                        <span class="absolute top-4 left-4 z-20 bg-darkBg/80 backdrop-blur-md border border-gray-700 text-accentWood text-xs px-3 py-1.5 rounded-full font-semibold">
+                            Хит мастерской
+                        </span>
+                    </div>
+                    <div class="p-8 space-y-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-2xl font-bold text-white mb-2">Парящие кровати</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                                Имитация деревянной платформы со скрытой LED-подсветкой. Создает неповторимый эффект парения и легкости в спальне.
+                            </p>
+                            <ul class="space-y-2 text-xs text-gray-300">
+                                <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-accentWood"></i><span>Скрытая подсветка в базе</span></li>
+                                <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-accentWood"></i><span>Усиленный стальной каркас</span></li>
+                                <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-accentWood"></i><span>Экологичное покрытие маслом</span></li>
+                            </ul>
+                        </div>
+                        <div class="pt-4 border-t border-gray-800 flex items-center justify-between">
+                            <span class="text-sm font-semibold text-accentWood">от 44 000 ₽</span>
+                            <a href="#sizes" class="text-xs font-bold text-white bg-darkBg border border-gray-700 hover:border-accentWood px-4 py-2 rounded-xl transition-all">
+                                Выбрать размер
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="bg-cardBg border border-gray-800 rounded-3xl overflow-hidden flex flex-col justify-between group hover:border-accentWood/50 transition-all">
+                    <div class="h-64 bg-metalGray relative overflow-hidden flex items-center justify-center">
+                        <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-transparent to-transparent z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=800&q=80" alt="Стеллажи и тумбы" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/12141c/c58b53?text=Shelves+Cabinets'">
+                    </div>
+                    <div class="p-8 space-y-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-2xl font-bold text-white mb-2">Стеллажи и тумбы</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                                Прочный металлический каркас, массив дерева и идеальные пропорции под ваш интерьер. Функциональность и эстетика в каждой детали.
+                            </p>
+                            <ul class="space-y-2 text-xs text-gray-300">
+                                <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-accentWood"></i><span>Индивидуальная высота и ширина</span></li>
+                                <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-accentWood"></i><span>Надежные крепления и полки</span></li>
+                                <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-accentWood"></i><span>Идеально под стиль лофт</span></li>
+                            </ul>
+                        </div>
+                        <div class="pt-4 border-t border-gray-800 flex items-center justify-between">
+                            <span class="text-sm font-semibold text-accentWood">Под заказ</span>
+                            <a href="#contacts" class="text-xs font-bold text-white bg-darkBg border border-gray-700 hover:border-accentWood px-4 py-2 rounded-xl transition-all">
+                                Заказать расчет
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="bg-cardBg border border-gray-800 rounded-3xl overflow-hidden flex flex-col justify-between group hover:border-accentWood/50 transition-all">
+                    <div class="h-64 bg-metalGray relative overflow-hidden flex items-center justify-center">
+                        <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-transparent to-transparent z-10"></div>
+                        <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80" alt="Комплекты под ключ" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/12141c/c58b53?text=Turnkey+Sets'">
+                    </div>
+                    <div class="p-8 space-y-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-2xl font-bold text-white mb-2">Комплекты «под ключ»</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                                Комплексное оснащение для квартир, студий и гостевых домов: кровать, прикроватные тумбы, стеллажи в едином стиле.
+                            </p>
+                            <ul class="space-y-2 text-xs text-gray-300">
+                                <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-accentWood"></i><span>Единая концепция дизайна</span></li>
+                                <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-accentWood"></i><span>Скидка при заказе комплекта</span></li>
+                                <li class="flex items-center space-x-2"><i class="fa-solid fa-check text-accentWood"></i><span>Доставка и сборка включены</span></li>
+                            </ul>
+                        </div>
+                        <div class="pt-4 border-t border-gray-800 flex items-center justify-between">
+                            <span class="text-sm font-semibold text-accentWood">Спецпредложение</span>
+                            <a href="#contacts" class="text-xs font-bold text-white bg-darkBg border border-gray-700 hover:border-accentWood px-4 py-2 rounded-xl transition-all">
+                                Узнать цену
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SIZES & PRICING SECTION -->
+    <section id="sizes" class="py-20 bg-cardBg/40 border-t border-b border-gray-800/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <h2 class="text-xs uppercase tracking-widest text-accentWood font-bold">Линейка размеров</h2>
+                <h3 class="text-3xl sm:text-4xl font-extrabold text-white">Стандарт — быстро. Нестандарт — точно под вас</h3>
+                <p class="text-gray-400 text-sm sm:text-base">
+                    Выберите готовую стандартную линейку или закажите индивидуальный размер под параметры вашего помещения.
+                </p>
+            </div>
+
+            <!-- Pricing Table for Desktop / Cards for Mobile -->
+            <div class="bg-cardBg border border-gray-800 rounded-3xl overflow-hidden shadow-xl mb-12">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-gray-800 bg-metalGray/50 text-xs uppercase tracking-wider text-accentWood font-semibold">
+                                <th class="py-5 px-6">Размер спального места</th>
+                                <th class="py-5 px-6">Срок изготовления</th>
+                                <th class="py-5 px-6">Стоимость</th>
+                                <th class="py-5 px-6 text-right">Действие</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-800 text-sm">
+                            <tr class="hover:bg-cardHover transition-colors">
+                                <td class="py-5 px-6 font-bold text-white flex items-center space-x-3">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-accentWood"></span>
+                                    <span>140 × 200 см</span>
+                                </td>
+                                <td class="py-5 px-6 text-gray-300">10–12 дней</td>
+                                <td class="py-5 px-6 font-bold text-accentWood">44 000 ₽</td>
+                                <td class="py-5 px-6 text-right">
+                                    <button onclick="openOrderModal('140x200', '44 000 ₽')" class="bg-accentWood hover:bg-amber-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all shadow-md">
+                                        Заказать
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-cardHover transition-colors">
+                                <td class="py-5 px-6 font-bold text-white flex items-center space-x-3">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-accentWood"></span>
+                                    <span>160 × 200 см</span>
+                                </td>
+                                <td class="py-5 px-6 text-gray-300">10–12 дней</td>
+                                <td class="py-5 px-6 font-bold text-accentWood">52 000 ₽</td>
+                                <td class="py-5 px-6 text-right">
+                                    <button onclick="openOrderModal('160x200', '52 000 ₽')" class="bg-accentWood hover:bg-amber-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all shadow-md">
+                                        Заказать
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-cardHover transition-colors">
+                                <td class="py-5 px-6 font-bold text-white flex items-center space-x-3">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-accentWood"></span>
+                                    <span>180 × 200 см</span>
+                                </td>
+                                <td class="py-5 px-6 text-gray-300">10–12 дней</td>
+                                <td class="py-5 px-6 font-bold text-accentWood">58 000 ₽</td>
+                                <td class="py-5 px-6 text-right">
+                                    <button onclick="openOrderModal('180x200', '58 000 ₽')" class="bg-accentWood hover:bg-amber-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all shadow-md">
+                                        Заказать
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-cardHover transition-colors">
+                                <td class="py-5 px-6 font-bold text-white flex items-center space-x-3">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-accentWood"></span>
+                                    <span>200 × 200 см</span>
+                                </td>
+                                <td class="py-5 px-6 text-gray-300">12–14 дней</td>
+                                <td class="py-5 px-6 font-bold text-accentWood">от 64 000 ₽</td>
+                                <td class="py-5 px-6 text-right">
+                                    <button onclick="openOrderModal('200x200', 'от 64 000 ₽')" class="bg-accentWood hover:bg-amber-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all shadow-md">
+                                        Заказать
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Custom Size Banner -->
+            <div class="bg-gradient-to-r from-cardBg to-metalGray border border-accentWood/40 rounded-3xl p-8 lg:p-12 flex flex-col lg:flex-row items-center justify-between gap-8 glow-wood">
+                <div class="space-y-3 text-center lg:text-left">
+                    <span class="text-xs uppercase tracking-widest text-accentWood font-bold bg-accentWood/10 px-3 py-1 rounded-full border border-accentWood/30">Индивидуальный подход</span>
+                    <h4 class="text-2xl sm:text-3xl font-extrabold text-white">Нестандартный размер под ваше пространство</h4>
+                    <p class="text-gray-300 text-sm max-w-xl">
+                        Конструкция и геометрия могут меняться. Изготавливаем по вашим чертежам и замерам с точной адаптацией под ниши и планировку.
+                    </p>
+                </div>
+                <div>
+                    <a href="#contacts" class="bg-white hover:bg-gray-200 text-darkBg font-bold px-8 py-4 rounded-xl shadow-xl transition-all inline-block whitespace-nowrap">
+                        Запросить нестандарт
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- HOW WE WORK SECTION -->
+    <section id="process" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <h2 class="text-xs uppercase tracking-widest text-accentWood font-bold">Мы работаем</h2>
+                <h3 class="text-3xl sm:text-4xl font-extrabold text-white">От чертежа до монтажа</h3>
+                <p class="text-gray-400 text-sm sm:text-base">
+                    Прозрачный процесс создания вашей мебели на каждом этапе.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Step 1 -->
+                <div class="bg-cardBg border border-gray-800 rounded-2xl p-8 relative group hover:border-accentWood transition-all">
+                    <div class="text-4xl font-black text-accentWood/30 absolute top-6 right-6 group-hover:text-accentWood/60 transition-colors">01</div>
+                    <div class="w-12 h-12 rounded-xl bg-accentWood/10 border border-accentWood/30 flex items-center justify-center text-accentWood text-xl mb-6">
+                        <i class="fa-solid fa-ruler-combined"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-2">Чертёж</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Снимаем замеры, проектируем изделие под ваше пространство и согласовываем детали.
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="bg-cardBg border border-gray-800 rounded-2xl p-8 relative group hover:border-accentWood transition-all">
+                    <div class="text-4xl font-black text-accentWood/30 absolute top-6 right-6 group-hover:text-accentWood/60 transition-colors">02</div>
+                    <div class="w-12 h-12 rounded-xl bg-accentWood/10 border border-accentWood/30 flex items-center justify-center text-accentWood text-xl mb-6">
+                        <i class="fa-solid fa-fire-burner"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-2">Металл</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Профессиональная резка, точная сварка каркасов и надежное защитное покрытие.
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="bg-cardBg border border-gray-800 rounded-2xl p-8 relative group hover:border-accentWood transition-all">
+                    <div class="text-4xl font-black text-accentWood/30 absolute top-6 right-6 group-hover:text-accentWood/60 transition-colors">03</div>
+                    <div class="w-12 h-12 rounded-xl bg-accentWood/10 border border-accentWood/30 flex items-center justify-center text-accentWood text-xl mb-6">
+                        <i class="fa-solid fa-tree"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-2">Дерево</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Обработка массива дерева, шлифовка и глубокая пропитка натуральным маслом.
+                    </p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="bg-cardBg border border-gray-800 rounded-2xl p-8 relative group hover:border-accentWood transition-all">
+                    <div class="text-4xl font-black text-accentWood/30 absolute top-6 right-6 group-hover:text-accentWood/60 transition-colors">04</div>
+                    <div class="w-12 h-12 rounded-xl bg-accentWood/10 border border-accentWood/30 flex items-center justify-center text-accentWood text-xl mb-6">
+                        <i class="fa-solid fa-truck-ramp-box"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-2">Монтаж</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Доставляем, собираем и устанавливаем мебель на вашем объекте «под ключ».
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACTS & FOOTER SECTION -->
+    <section id="contacts" class="py-20 bg-cardBg/60 border-t border-gray-800 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- Left info -->
+                <div class="space-y-6">
+                    <div class="inline-flex items-center space-x-2 bg-cardBg border border-gray-800 px-4 py-2 rounded-full text-xs font-semibold text-accentWood uppercase tracking-wider">
+                        <i class="fa-solid fa-headset text-accentWood"></i>
+                        <span>Свяжитесь с нами</span>
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Соберём пространство под вас</h2>
+                    <p class="text-gray-400 text-sm sm:text-base leading-relaxed">
+                        Готовы обсудить ваш проект? Напишите нам в Instagram, позвоните или отправьте заявку на электронную почту. Мы ответим на все вопросы и поможем с выбором.
+                    </p>
+
+                    <div class="space-y-4 pt-4">
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-4 p-4 rounded-2xl bg-cardBg border border-gray-800 hover:border-accentWood transition-all group">
+                            <div class="w-12 h-12 rounded-xl bg-accentWood/10 border border-accentWood/30 flex items-center justify-center text-accentWood text-xl group-hover:scale-110 transition-transform">
+                                <i class="fa-brands fa-instagram"></i>
+                            </div>
+                            <div>
+                                <span class="block text-xs text-gray-400">Instagram профиль</span>
+                                <span class="block text-white font-bold">@metall_tishina</span>
+                            </div>
+                        </a>
+
+                        <a href="tel:+70000000000" class="flex items-center space-x-4 p-4 rounded-2xl bg-cardBg border border-gray-800 hover:border-accentWood transition-all group">
+                            <div class="w-12 h-12 rounded-xl bg-accentWood/10 border border-accentWood/30 flex items-center justify-center text-accentWood text-xl group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div>
+                                <span class="block text-xs text-gray-400">Телефон для связи</span>
+                                <span class="block text-white font-bold">+7 (000) 000-00-00</span>
+                            </div>
+                        </a>
+
+                        <a href="mailto:hello@metall-tishina.ru" class="flex items-center space-x-4 p-4 rounded-2xl bg-cardBg border border-gray-800 hover:border-accentWood transition-all group">
+                            <div class="w-12 h-12 rounded-xl bg-accentWood/10 border border-accentWood/30 flex items-center justify-center text-accentWood text-xl group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <div>
+                                <span class="block text-xs text-gray-400">Электронная почта</span>
+                                <span class="block text-white font-bold">hello@metall-tishina.ru</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right quick contact form -->
+                <div class="bg-cardBg border border-gray-800 rounded-3xl p-8 shadow-2xl">
+                    <h3 class="text-2xl font-bold text-white mb-2">Оставить заявку</h3>
+                    <p class="text-gray-400 text-sm mb-6">Заполните форму, и мы свяжемся с вами в течение 15 минут.</p>
+                    
+                    <form onsubmit="handleFormSubmit(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs text-gray-300 font-medium mb-1.5">Ваше имя</label>
+                            <input type="text" required placeholder="Иван" class="w-full bg-darkBg border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-accentWood transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-300 font-medium mb-1.5">Телефон / WhatsApp</label>
+                            <input type="tel" required placeholder="+7 (999) 000-00-00" class="w-full bg-darkBg border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-accentWood transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-300 font-medium mb-1.5">Интересующее изделие или размер</label>
+                            <textarea rows="3" placeholder="Парящая кровать 160х200 или свой размер..." class="w-full bg-darkBg border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-accentWood transition-colors"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-accentWood hover:bg-amber-700 text-white font-bold py-4 rounded-xl shadow-lg glow-wood transition-all">
+                            Отправить заявку
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="mt-20 pt-8 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500">
+                <p>&copy; 2026 Мастерская лофт-мебели «Металл и тишина». Все права защищены.</p>
+                <div class="flex space-x-6 mt-4 sm:mt-0">
+                    <a href="#about" class="hover:text-accentWood transition-colors">Политика конфиденциальности</a>
+                    <a href="#catalog" class="hover:text-accentWood transition-colors">Каталог</a>
+                    <a href="#contacts" class="hover:text-accentWood transition-colors">Контакты</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive JavaScript -->
+    <script>
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu on link click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Toast notification helper (replaces alert)
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            toastMsg.textContent = message;
+            
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3500);
+        }
+
+        // Open order modal simulation
+        function openOrderModal(size, price) {
+            showToast(`Выбран размер ${size} (${price}). Переходим к оформлению!`);
+            const contactsSection = document.getElementById('contacts');
+            contactsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Form submit handler
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            showToast('Спасибо! Ваша заявка успешно отправлена. Мы свяжемся с вами.');
+            e.target.reset();
+        }
+    </script>
+</body>
+</html>
